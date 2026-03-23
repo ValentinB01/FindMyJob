@@ -7,7 +7,7 @@
 
 ## 1. User Story Generation
 
-**Tool used:** Claude (via Emergent platform)
+**Tool used:** Claude 
 
 **Prompt used:**
 > "Generate 15 user stories for a job-search platform with two AI agents.
@@ -22,7 +22,7 @@ Minor refinements were made manually for acceptance criteria clarity.
 
 ## 2. Architecture & Design
 
-**Tool used:** Claude / Emergent AI
+**Tool used:** Claude / Gemini
 
 **Prompts:**
 - "Design a dark professional dashboard UI for a job search platform. LinkedIn-style."
@@ -38,7 +38,7 @@ Minor refinements were made manually for acceptance criteria clarity.
 
 ## 3. Code Generation
 
-**Tool used:** Claude (via Emergent platform)
+**Tool used:** Claude
 
 **Key generated code:**
 - `apps/cv/cv_parser.py` — regex-based CV text extractor with section detection
