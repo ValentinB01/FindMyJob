@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jobhuntduo
+      POSTGRES_USER: jobhunt
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobhunt -d jobhuntduo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://jobhunt:${POSTGRES_PASSWORD:-changeme}@db:5432/jobhuntduo
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      DEBUG: "False"
+      LMSTUDIO_BASE_URL: ${LMSTUDIO_BASE_URL:-http://host.docker.internal:1234/v1}
+      JOB_FINDER_MODEL: ${JOB_FINDER_MODEL:-qwen2.5-1.5b-instruct}
+      CV_TAILOR_MODEL: ${CV_TAILOR_MODEL:-llama-3.2-3b-instruct}
+    volumes:
+      - media_data:/app/media
+    ports:
+      - "8001:8001"
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_BACKEND_URL: http://localhost:8001
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  media_data:
