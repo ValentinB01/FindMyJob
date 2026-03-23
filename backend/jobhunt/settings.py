@@ -105,3 +105,7 @@ SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 0
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Timezone
+USE_TZ = False
+TIME_ZONE = "UTC"
